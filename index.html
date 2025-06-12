@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Seni Çok Seviyorum</title>
+  <title>Seni Çok Seviyorum & Başarılar Sevgilim</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -11,6 +11,7 @@
       background-size: 600% 600%;
       animation: gradientShift 30s ease infinite;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -19,6 +20,9 @@
       overflow: hidden;
       position: relative;
       user-select: none;
+      gap: 10px;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     @keyframes gradientShift {
@@ -36,8 +40,8 @@
       width: 0;
       animation: typing 3s steps(22, end) forwards, blink 0.6s step-end infinite;
       text-align: center;
-      z-index: 2;
       user-select: none;
+      max-width: 100vw;
     }
 
     @keyframes typing {
@@ -50,9 +54,22 @@
     }
 
     .finished {
-      border-right: none;
-      animation: none;
-      width: auto;
+      border-right: none !important;
+      animation: none !important;
+      width: auto !important;
+    }
+
+    /* İkinci satır */
+    #text2 {
+      color: #a31545;
+      border-right: 2px solid #a31545;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 100vw;
+      width: 0;
+      font-size: 2.5em; /* Birinci satırla aynı */
+      font-family: 'Great Vibes', cursive;
+      animation: none !important;
     }
 
     .floating-symbol {
@@ -77,7 +94,6 @@
       }
     }
 
-    /* Tüm ekranı kaplayan şeffaf dokunma katmanı */
     #touch-layer {
       position: absolute;
       top: 0; left: 0;
@@ -89,29 +105,53 @@
 </head>
 <body>
 
-  <div id="text" class="typewriter">Seni Çok Seviyorum ❤️</div>
+  <div id="text1" class="typewriter">Seni Çok Seviyorum ❤️</div>
+  <div id="text2"></div>
+
   <div id="touch-layer"></div>
 
   <script>
-    const textEl = document.getElementById('text');
+    const text1 = document.getElementById('text1');
+    const text2 = document.getElementById('text2');
+    const text2Content = "Başarılar Sevgilim ❤️";
+    const typingDuration1 = 3000; // 1. yazı süresi
+    const typingDuration2 = 2800; // 2. yazı süresi
 
-    // Yazı bittikten sonra imleç kalksın
     setTimeout(() => {
-      textEl.classList.add('finished');
-    }, 3200);
+      text1.classList.add('finished');
+      startSecondTyping();
+    }, typingDuration1 + 200);
 
-    // Motif listesi (kalp ve çiçek)
+    function startSecondTyping() {
+      let i = 0;
+      text2.style.borderRight = "2px solid #a31545";
+      text2.style.whiteSpace = "nowrap";
+      text2.style.overflow = "hidden";
+      text2.style.width = "0";
+
+      function type() {
+        if (i <= text2Content.length) {
+          text2.textContent = text2Content.substring(0, i);
+          text2.style.width = `${i}ch`;
+          i++;
+          setTimeout(type, typingDuration2 / text2Content.length);
+        } else {
+          text2.style.borderRight = 'none';
+          text2.style.width = 'auto';
+        }
+      }
+      type();
+    }
+
     const symbols = ['❤️', '🌸', '💕', '💖'];
 
     function createSymbol(x, y) {
       const symbol = document.createElement('div');
       symbol.className = 'floating-symbol';
-      // Rastgele sembol seç
       symbol.innerText = symbols[Math.floor(Math.random() * symbols.length)];
       symbol.style.left = `${x - 15}px`;
       symbol.style.top = `${y - 15}px`;
-      // Renk tonlarıyla oynayalım hafif varyasyon
-      const hue = 320 + Math.random() * 40; // 320-360 arası pembemsi
+      const hue = 320 + Math.random() * 40;
       symbol.style.color = `hsl(${hue}, 75%, 65%)`;
       document.body.appendChild(symbol);
 
@@ -122,12 +162,10 @@
 
     const touchLayer = document.getElementById('touch-layer');
 
-    // Masaüstü tıklama
     touchLayer.addEventListener('click', (e) => {
       createSymbol(e.clientX, e.clientY);
     });
 
-    // Mobil dokunma
     touchLayer.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
       createSymbol(touch.clientX, touch.clientY);
