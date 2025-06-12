@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Seni Çok Seviyorum</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
   <style>
     body {
-      background-color: #fff0f5;
+      background: linear-gradient(270deg, #fff0f5, #f8c8dc, #fff0f5);
+      background-size: 600% 600%;
+      animation: gradientShift 30s ease infinite;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -16,6 +18,13 @@
       font-family: 'Great Vibes', cursive;
       overflow: hidden;
       position: relative;
+      user-select: none;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .typewriter {
@@ -28,6 +37,7 @@
       animation: typing 3s steps(22, end) forwards, blink 0.6s step-end infinite;
       text-align: center;
       z-index: 2;
+      user-select: none;
     }
 
     @keyframes typing {
@@ -45,14 +55,15 @@
       width: auto;
     }
 
-    .floating-heart {
+    .floating-symbol {
       position: absolute;
       font-size: 1.5em;
-      color: #e91e63;
       animation: floatUp 5s ease-out forwards;
       pointer-events: none;
       user-select: none;
       z-index: 1;
+      opacity: 1;
+      will-change: transform, opacity;
     }
 
     @keyframes floatUp {
@@ -89,17 +100,23 @@
       textEl.classList.add('finished');
     }, 3200);
 
-    // Kalp çıkaran fonksiyon
-    function createHeart(x, y) {
-      const heart = document.createElement('div');
-      heart.className = 'floating-heart';
-      heart.innerText = '❤️';
-      heart.style.left = `${x - 10}px`;
-      heart.style.top = `${y - 10}px`;
-      document.body.appendChild(heart);
+    // Motif listesi (kalp ve çiçek)
+    const symbols = ['❤️', '🌸', '💕', '💖'];
+
+    function createSymbol(x, y) {
+      const symbol = document.createElement('div');
+      symbol.className = 'floating-symbol';
+      // Rastgele sembol seç
+      symbol.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      symbol.style.left = `${x - 15}px`;
+      symbol.style.top = `${y - 15}px`;
+      // Renk tonlarıyla oynayalım hafif varyasyon
+      const hue = 320 + Math.random() * 40; // 320-360 arası pembemsi
+      symbol.style.color = `hsl(${hue}, 75%, 65%)`;
+      document.body.appendChild(symbol);
 
       setTimeout(() => {
-        heart.remove();
+        symbol.remove();
       }, 5000);
     }
 
@@ -107,13 +124,13 @@
 
     // Masaüstü tıklama
     touchLayer.addEventListener('click', (e) => {
-      createHeart(e.clientX, e.clientY);
+      createSymbol(e.clientX, e.clientY);
     });
 
     // Mobil dokunma
     touchLayer.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
-      createHeart(touch.clientX, touch.clientY);
+      createSymbol(touch.clientX, touch.clientY);
     }, { passive: true });
   </script>
 
