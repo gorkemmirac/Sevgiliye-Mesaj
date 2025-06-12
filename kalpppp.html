@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seni Çok Seviyorum</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #fff0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Great Vibes', cursive;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .typewriter {
+      font-size: 2.5em;
+      color: #c2185b;
+      border-right: 2px solid #c2185b;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3s steps(22, end) forwards, blink 0.6s step-end infinite;
+      text-align: center;
+      z-index: 2;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 22ch; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .finished {
+      border-right: none;
+      animation: none;
+      width: auto;
+    }
+
+    .floating-heart {
+      position: absolute;
+      font-size: 1.5em;
+      color: #e91e63;
+      animation: floatUp 5s ease-out forwards;
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1.5);
+      }
+    }
+
+    /* Tüm ekranı kaplayan şeffaf dokunma katmanı */
+    #touch-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="text" class="typewriter">Seni Çok Seviyorum ❤️</div>
+  <div id="touch-layer"></div>
+
+  <script>
+    const textEl = document.getElementById('text');
+
+    // Yazı bittikten sonra imleç kalksın
+    setTimeout(() => {
+      textEl.classList.add('finished');
+    }, 3200);
+
+    // Kalp çıkaran fonksiyon
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.innerText = '❤️';
+      heart.style.left = `${x - 10}px`;
+      heart.style.top = `${y - 10}px`;
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }
+
+    const touchLayer = document.getElementById('touch-layer');
+
+    // Masaüstü tıklama
+    touchLayer.addEventListener('click', (e) => {
+      createHeart(e.clientX, e.clientY);
+    });
+
+    // Mobil dokunma
+    touchLayer.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      createHeart(touch.clientX, touch.clientY);
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
