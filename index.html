@@ -111,66 +111,67 @@
   <div id="touch-layer"></div>
 
   <script>
-    const text1 = document.getElementById('text1');
-    const text2 = document.getElementById('text2');
-    const text2Content = "Başarılar Sevgilim ❤️";
-    const typingDuration1 = 3000; // 1. yazı süresi
-    const typingDuration2 = 2800; // 2. yazı süresi
+  const symbols = ['❤️', '🌸', '💕', '💖'];
+
+  function createSymbol(x, y) {
+    const symbol = document.createElement('div');
+    symbol.className = 'floating-symbol';
+    symbol.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+    symbol.style.left = `${x - 15}px`;
+    symbol.style.top = `${y - 15}px`;
+    const hue = 320 + Math.random() * 40;
+    symbol.style.color = `hsl(${hue}, 75%, 65%)`;
+    document.body.appendChild(symbol);
 
     setTimeout(() => {
-      text1.classList.add('finished');
-      startSecondTyping();
-    }, typingDuration1 + 200);
+      symbol.remove();
+    }, 5000);
+  }
 
-    function startSecondTyping() {
-      let i = 0;
-      text2.style.borderRight = "2px solid #a31545";
-      text2.style.whiteSpace = "nowrap";
-      text2.style.overflow = "hidden";
-      text2.style.width = "0";
+  const touchLayer = document.getElementById('touch-layer');
 
-      function type() {
-        if (i <= text2Content.length) {
-          text2.textContent = text2Content.substring(0, i);
-          text2.style.width = `${i}ch`;
-          i++;
-          setTimeout(type, typingDuration2 / text2Content.length);
-        } else {
-          text2.style.borderRight = 'none';
-          text2.style.width = 'auto';
-        }
-      }
-      type();
-    }
-
-    const symbols = ['❤️', '🌸', '💕', '💖'];
-
-    function createSymbol(x, y) {
-      const symbol = document.createElement('div');
-      symbol.className = 'floating-symbol';
-      symbol.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-      symbol.style.left = `${x - 15}px`;
-      symbol.style.top = `${y - 15}px`;
-      const hue = 320 + Math.random() * 40;
-      symbol.style.color = `hsl(${hue}, 75%, 65%)`;
-      document.body.appendChild(symbol);
-
-      setTimeout(() => {
-        symbol.remove();
-      }, 5000);
-    }
-
-    const touchLayer = document.getElementById('touch-layer');
-
-    touchLayer.addEventListener('click', (e) => {
+  // --- PC Mouse Events ---
+  let mouseInterval;
+  touchLayer.addEventListener('mousedown', (e) => {
+    createSymbol(e.clientX, e.clientY);
+    mouseInterval = setInterval(() => {
       createSymbol(e.clientX, e.clientY);
-    });
+    }, 100);
+  });
 
-    touchLayer.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
+  touchLayer.addEventListener('mousemove', (e) => {
+    if (mouseInterval) {
+      createSymbol(e.clientX, e.clientY);
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    clearInterval(mouseInterval);
+    mouseInterval = null;
+  });
+
+  // --- Mobile Touch Events ---
+  let touchInterval;
+  touchLayer.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    createSymbol(touch.clientX, touch.clientY);
+    touchInterval = setInterval(() => {
       createSymbol(touch.clientX, touch.clientY);
-    }, { passive: true });
-  </script>
+    }, 100);
+  }, { passive: true });
+
+  touchLayer.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    if (touchInterval) {
+      createSymbol(touch.clientX, touch.clientY);
+    }
+  }, { passive: true });
+
+  touchLayer.addEventListener('touchend', () => {
+    clearInterval(touchInterval);
+    touchInterval = null;
+  });
+</script>
 
 </body>
 </html>
