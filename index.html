@@ -10,68 +10,90 @@
       background: linear-gradient(270deg, #fff0f5, #f8c8dc, #fff0f5);
       background-size: 600% 600%;
       animation: gradientShift 30s ease infinite;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       margin: 0;
       font-family: 'Great Vibes', cursive;
       overflow: hidden;
-      position: relative;
       user-select: none;
-      gap: 10px;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
       box-sizing: border-box;
+      color: #c2185b;
     }
-
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
+    /* Ortak tip yazılar */
     .typewriter {
       font-size: 2.5em;
-      color: #c2185b;
-      border-right: 2px solid #c2185b;
+      border-right: 2px solid currentColor;
       white-space: nowrap;
       overflow: hidden;
       width: 0;
       animation: typing 3s steps(22, end) forwards, blink 0.6s step-end infinite;
       text-align: center;
-      user-select: none;
       max-width: 100vw;
+      user-select: none;
+      margin-bottom: 10px;
+    }
+    #text2 {
+      color: #a31545;
+      font-size: 2.5em;
+      border-right: 2px solid #a31545;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      max-width: 100vw;
+      user-select: none;
+      margin-top: 0;
+      animation: none;
     }
 
     @keyframes typing {
       from { width: 0; }
       to { width: 22ch; }
     }
-
     @keyframes blink {
       50% { border-color: transparent; }
     }
-
     .finished {
       border-right: none !important;
       animation: none !important;
       width: auto !important;
     }
 
-    /* İkinci satır */
-    #text2 {
-      color: #a31545;
-      border-right: 2px solid #a31545;
-      white-space: nowrap;
-      overflow: hidden;
-      max-width: 100vw;
-      width: 0;
-      font-size: 2.5em; /* Birinci satırla aynı */
-      font-family: 'Great Vibes', cursive;
-      animation: none !important;
+    /* Ekranlar gizle/göster için */
+    .screen {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      user-select: none;
+      background: transparent;
+      z-index: 1;
+    }
+    .screen.active {
+      display: flex;
+      z-index: 5;
     }
 
+    /* İlk ekran stilleri */
+    #screen1 {
+      position: relative;
+    }
+
+    /* Emoji animasyonları */
     .floating-symbol {
       position: absolute;
       font-size: 1.5em;
@@ -81,8 +103,8 @@
       z-index: 1;
       opacity: 1;
       will-change: transform, opacity;
+      color: #e91e63;
     }
-
     @keyframes floatUp {
       0% {
         opacity: 1;
@@ -94,111 +116,382 @@
       }
     }
 
-    #touch-layer {
+    /* Sağ ve sol alt kalp butonları */
+    .corner-heart {
+      position: fixed;
+      font-size: 2.8em;
+      color: #e91e63;
+      cursor: pointer;
+      user-select: none;
+      z-index: 15;
+      transition: transform 0.2s ease;
+      user-select: none;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    }
+    .corner-heart:hover {
+      transform: scale(1.2);
+    }
+    #nextScreenBtn {
+      bottom: 20px;
+      right: 20px;
+    }
+    #prevScreenBtn {
+      bottom: 20px;
+      left: 20px;
+    }
+
+    /* İkinci ekran (oyun) stilleri */
+    #screen2 {
+      background: transparent;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 80px;
+      color: #a31545;
+      font-size: 1.2em;
+    }
+    #gameArea {
+      position: relative;
+      width: 320px;
+      height: 480px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(194, 24, 91, 0.8);
+      overflow: hidden;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    .game-heart {
       position: absolute;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 10;
+      font-size: 2em;
+      color: #e91e63;
+      cursor: pointer;
+      user-select: none;
+      user-drag: none;
+      filter: drop-shadow(0 0 3px rgba(0,0,0,0.2));
+      transition: transform 0.1s ease;
+    }
+    .game-heart:active {
+      transform: scale(1.3);
+    }
+
+    #timer {
+  display: none; /* Başlangıçta gizli */
+  /* Mevcut diğer stiller burada */
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8em;
+  color: #e91e63;
+  font-weight: bold;
+  text-shadow: 0 0 5px #c2185b;
+  user-select: none;
+  z-index: 20;
+}
+
+    #score {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    #gameOverScreen {
+      display: none;
+      text-align: center;
+      color: #c2185b;
+      font-size: 2em;
+      margin-top: 20px;
+      user-select: none;
+    }
+    #okButton, #restartButton {
+      margin: 10px 10px 0 10px;
+      padding: 8px 16px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      background-color: #c2185b;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 0 8px #c2185b;
+      transition: background-color 0.3s ease;
+    }
+    #okButton:hover, #restartButton:hover {
+      background-color: #e91e63;
     }
   </style>
 </head>
 <body>
 
-  <div id="text1" class="typewriter">Seni Çok Seviyorum ❤️</div>
-  <div id="text2"></div>
+  <!-- Zaman üstte -->
+  <div id="timer">30</div>
 
-  <div id="touch-layer"></div>
+  <!-- Ekran 1 -->
+  <div id="screen1" class="screen active">
+    <div id="text1" class="typewriter">Seni Çok Seviyorum ❤️</div>
+    <div id="text2"></div>
+    <div id="touch-layer" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:10;"></div>
+    <div id="nextScreenBtn" class="corner-heart" title="Oyuna Geç">❤️</div>
+  </div>
+
+  <!-- Ekran 2 -->
+  <div id="screen2" class="screen">
+    <div id="prevScreenBtn" class="corner-heart" title="Geri Dön">❤️</div>
+    <div id="gameArea"></div>
+    <div id="score">Puan: 0</div>
+    <div id="gameOverScreen">
+      <div>Oyun Bitti!</div>
+      <button id="okButton">OK</button>
+      <button id="restartButton">Yeniden Oyna</button>
+    </div>
+  </div>
+
+  <!-- Ses -->
+  <audio id="bgMusic" loop>
+    <source src="https://assets.codepen.io/605876/sharingan-perfect.mp3" type="audio/mpeg" />
+    Tarayıcınız audio elementini desteklemiyor.
+  </audio>
 
   <script>
-  const text1 = document.getElementById('text1');
-  const text2 = document.getElementById('text2');
-  const text2Content = "Başarılar Sevgilim ❤️";
-  const typingDuration1 = 3000; // 1. yazı süresi
-  const typingDuration2 = 2800; // 2. yazı süresi
+    const text1 = document.getElementById('text1');
+    const text2 = document.getElementById('text2');
+    const text2Content = "Başarılar Sevgilim ❤️";
+    const typingDuration1 = 3000; // 1. yazı süresi
+    const typingDuration2 = 2800; // 2. yazı süresi
 
-  // İlk yazı bittikten sonra ikinci yazıyı başlat
+    // İkinci yazıyı tipwriter efekti ile yazdır
+    function startSecondTyping() {
+      let i = 0;
+      text2.style.borderRight = "2px solid #a31545";
+      text2.style.whiteSpace = "nowrap";
+      text2.style.overflow = "hidden";
+      text2.style.width = "0";
+
+      function type() {
+        if (i <= text2Content.length) {
+          text2.textContent = text2Content.substring(0, i);
+          text2.style.width = `${i}ch`;
+          i++;
+          setTimeout(type, typingDuration2 / text2Content.length);
+        } else {
+          text2.style.borderRight = 'none';
+          text2.style.width = 'auto';
+        }
+      }
+      type();
+    }
+
+    setTimeout(() => {
+      text1.classList.add('finished');
+      startSecondTyping();
+    }, typingDuration1 + 200);
+
+    // Ekranlar ve butonlar
+    const screen1 = document.getElementById('screen1');
+    const screen2 = document.getElementById('screen2');
+    const nextBtn = document.getElementById('nextScreenBtn');
+    const prevBtn = document.getElementById('prevScreenBtn');
+
+    nextBtn.addEventListener('click', () => {
+      switchScreen(2);
+      startGame();
+    });
+    prevBtn.addEventListener('click', () => {
+      switchScreen(1);
+      resetGame();
+    });
+
+function switchScreen(num) {
+  if (num === 1) {
+    screen1.classList.add('active');
+    screen2.classList.remove('active');
+    resetGame();
+    restartTyping(); // yazma animasyonu baştan başlıyor
+    enableEmoji(true);
+  } else {
+    screen2.classList.add('active');
+    screen1.classList.remove('active');
+    enableEmoji(false);
+  }
+}
+
+    // Tekrar yazdırma fonksiyonu (ilk ekranda)
+function restartTyping() {
+  text1.classList.remove('finished');
+  text1.style.width = '0';
+  text1.textContent = "Seni Çok Seviyorum ❤️";  // Yazıyı sıfırla
+  text2.textContent = '';
+  text2.style.width = '0';
+
   setTimeout(() => {
     text1.classList.add('finished');
     startSecondTyping();
-  }, typingDuration1 + 200);
+  }, 300); // 300 ms ile biraz daha güvenli bekleme
+}
 
-  function startSecondTyping() {
-    let i = 0;
-    text2.style.borderRight = "2px solid #a31545";
-    text2.style.whiteSpace = "nowrap";
-    text2.style.overflow = "hidden";
-    text2.style.width = "0";
+    // Emoji yönetimi
+    const touchLayer = document.getElementById('touch-layer');
+    const symbols = ['❤️', '🌸', '💕', '💖'];
 
-    function type() {
-      if (i <= text2Content.length) {
-        text2.textContent = text2Content.substring(0, i);
-        text2.style.width = `${i}ch`;
-        i++;
-        setTimeout(type, typingDuration2 / text2Content.length);
+    let isMouseDown = false;
+
+    function createSymbol(x, y) {
+      const symbol = document.createElement('div');
+      symbol.className = 'floating-symbol';
+      symbol.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      symbol.style.left = `${x - 15}px`;
+      symbol.style.top = `${y - 15}px`;
+      const hue = 320 + Math.random() * 40;
+      symbol.style.color = `hsl(${hue}, 75%, 65%)`;
+      document.body.appendChild(symbol);
+
+      setTimeout(() => {
+        symbol.remove();
+      }, 5000);
+    }
+
+    function enableEmoji(enable) {
+      if(enable) {
+        // Tıklama
+        touchLayer.addEventListener('click', onClick);
+        // Dokunma başlangıcı
+        touchLayer.addEventListener('touchstart', onTouchStart, { passive: true });
+        // Fare hareketi (sürükleme)
+        touchLayer.addEventListener('mousedown', onMouseDown);
+        touchLayer.addEventListener('mouseup', onMouseUp);
+        touchLayer.addEventListener('mousemove', onMouseMove);
+        // Dokunma hareketi (mobil sürükleme)
+        touchLayer.addEventListener('touchmove', onTouchMove, { passive: true });
       } else {
-        text2.style.borderRight = 'none';
-        text2.style.width = 'auto';
+        touchLayer.removeEventListener('click', onClick);
+        touchLayer.removeEventListener('touchstart', onTouchStart);
+        touchLayer.removeEventListener('mousedown', onMouseDown);
+        touchLayer.removeEventListener('mouseup', onMouseUp);
+        touchLayer.removeEventListener('mousemove', onMouseMove);
+        touchLayer.removeEventListener('touchmove', onTouchMove);
       }
     }
-    type();
-  }
-
-  // Emoji sembolleri
-  const symbols = ['❤️', '🌸', '💕', '💖'];
-
-  function createSymbol(x, y) {
-    const symbol = document.createElement('div');
-    symbol.className = 'floating-symbol';
-    symbol.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-    symbol.style.left = `${x - 15}px`;
-    symbol.style.top = `${y - 15}px`;
-    const hue = 320 + Math.random() * 40;
-    symbol.style.color = `hsl(${hue}, 75%, 65%)`;
-    document.body.appendChild(symbol);
-
-    setTimeout(() => {
-      symbol.remove();
-    }, 5000);
-  }
-
-  const touchLayer = document.getElementById('touch-layer');
-
-  // --- Mouse Sürükleme ve Basılı Tutma ---
-  let mouseDown = false;
-  touchLayer.addEventListener('mousedown', (e) => {
-    mouseDown = true;
-    createSymbol(e.clientX, e.clientY);
-  });
-  touchLayer.addEventListener('mousemove', (e) => {
-    if (mouseDown) {
-      createSymbol(e.clientX, e.clientY);
-    }
-  });
-  document.addEventListener('mouseup', () => {
-    mouseDown = false;
-  });
-
-  // --- Mobil Sürükleme ve Dokunma ---
-  let touchActive = false;
-  touchLayer.addEventListener('touchstart', (e) => {
-    touchActive = true;
-    const touch = e.touches[0];
-    createSymbol(touch.clientX, touch.clientY);
-  }, { passive: true });
-
-  touchLayer.addEventListener('touchmove', (e) => {
-    if (touchActive) {
+    function onClick(e) { createSymbol(e.clientX, e.clientY); }
+    function onTouchStart(e) {
       const touch = e.touches[0];
       createSymbol(touch.clientX, touch.clientY);
     }
-  }, { passive: true });
+    function onMouseDown() { isMouseDown = true; }
+    function onMouseUp() { isMouseDown = false; }
+    function onMouseMove(e) {
+      if(isMouseDown) createSymbol(e.clientX, e.clientY);
+    }
+    function onTouchMove(e) {
+      const touch = e.touches[0];
+      createSymbol(touch.clientX, touch.clientY);
+    }
 
-  touchLayer.addEventListener('touchend', () => {
-    touchActive = false;
-  });
-</script>
+    enableEmoji(true); // Başlangıçta aktif
+
+    // Oyun alanı ve oyun mantığı
+    const gameArea = document.getElementById('gameArea');
+    const scoreDisplay = document.getElementById('score');
+    const timerDisplay = document.getElementById('timer');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const okButton = document.getElementById('okButton');
+    const restartButton = document.getElementById('restartButton');
+
+    let gameTimer;
+    let gameDuration = 30; // saniye
+    let timeLeft = gameDuration;
+    let score = 0;
+    let heartInterval;
+    let hearts = [];
+
+    function randomPosition() {
+      const padding = 30;
+      const maxX = gameArea.clientWidth - padding;
+      const maxY = gameArea.clientHeight - padding;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      return { x, y };
+    }
+
+    function createGameHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'game-heart';
+      heart.innerText = '❤️';
+      const pos = randomPosition();
+      heart.style.left = `${pos.x}px`;
+      heart.style.top = `${pos.y}px`;
+      gameArea.appendChild(heart);
+
+      // Tıklanınca puan artır
+      heart.addEventListener('click', () => {
+        score++;
+        scoreDisplay.textContent = `Puan: ${score}`;
+        heart.remove();
+        hearts = hearts.filter(h => h !== heart);
+      });
+
+      hearts.push(heart);
+    }
+
+function startGame() {
+  resetGame();
+  timeLeft = gameDuration;
+  timerDisplay.textContent = timeLeft;
+  timerDisplay.style.display = 'block'; // Göster
+  gameOverScreen.style.display = 'none';
+  scoreDisplay.textContent = 'Puan: 0';
+  score = 0;
+
+  // Kalp oluştur
+  createGameHeart();
+    heartInterval = setInterval(() => {
+    if(hearts.length < 5) createGameHeart();
+  }, 1000);
+
+  // Sayaç başlat
+  gameTimer = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+    if(timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  clearInterval(gameTimer);
+  clearInterval(heartInterval);
+  hearts.forEach(h => h.remove());
+  hearts = [];
+  timerDisplay.style.display = 'none'; // Sayaç gizle
+  scoreDisplay.textContent = `Son Puan: ${score}`;
+  gameOverScreen.style.display = 'block';
+}
 
 
+function resetGame() {
+  clearInterval(gameTimer);
+  clearInterval(heartInterval);
+  hearts.forEach(h => h.remove());
+  hearts = [];
+  timerDisplay.style.display = 'none'; // Başlangıçta gizle
+  scoreDisplay.textContent = '';
+  gameOverScreen.style.display = 'none';
+}
+
+    okButton.addEventListener('click', () => {
+      gameOverScreen.style.display = 'none';
+    });
+restartButton.addEventListener('click', () => {
+  startGame();
+  gameOverScreen.style.display = 'none';
+});
+
+    // Arka plan müziği otomatik başlat (bazı tarayıcılarda izin isteyebilir)
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.2;
+    bgMusic.play().catch(() => { /* autoplay engellenebilir */ });
+
+  </script>
 </body>
 </html>
